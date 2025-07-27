@@ -2,7 +2,8 @@
 
 # 📞 Phone Number Location Tracker
 
-A Python-based CLI tool to trace phone numbers and retrieve location details using the Google Maps Geocoding API and the `phonenumbers` library. Specifically enhanced for South African numbers with province mapping.
+A Python-based CLI tool to trace phone numbers and retrieve location details using the Google Maps Geocoding API and the `phonenumbers` library. Specifically enhanced for South African numbers with province mapping(doesn’t actually show the precise location) but it something I am working on currently.
+
 
 ---
 
