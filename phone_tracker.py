@@ -4,7 +4,6 @@ import os
 from phonenumbers import geocoder, carrier
 from phonenumbers.phonenumberutil import NumberParseException
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY") or "YOUR_API_KEY"
 GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 
 ZA_AREA_CODES = {
