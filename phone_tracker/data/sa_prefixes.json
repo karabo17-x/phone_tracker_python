@@ -1,0 +1,104 @@
+{
+  "mobile_operators": {
+    "MTN": {
+      "prefixes": ["06", "07", "1"],
+      "regions": ["Multiple"],
+      "code": "MTN"
+    },
+    "Vodacom": {
+      "prefixes": ["08", "06"],
+      "regions": ["Multiple"],
+      "code": "VCM"
+    },
+    "Cell C": {
+      "prefixes": ["09", "08"],
+      "regions": ["Multiple"],
+      "code": "CLC"
+    },
+    "Telkom": {
+      "prefixes": ["10", "06"],
+      "regions": ["Multiple"],
+      "code": "TLM"
+    },
+    "Rain": {
+      "prefixes": ["08"],
+      "regions": ["Multiple"],
+      "code": "RAN"
+    }
+  },
+  "landline_prefixes": {
+    "Gauteng": {
+      "cities": {
+        "Johannesburg": ["011"],
+        "Pretoria": ["012"],
+        "Germiston": ["011"]
+      }
+    },
+    "Western Cape": {
+      "cities": {
+        "Cape Town": ["021"],
+        "Stellenbosch": ["021"],
+        "Paarl": ["021"]
+      }
+    },
+    "KwaZulu-Natal": {
+      "cities": {
+        "Durban": ["031"],
+        "Pietermaritzburg": ["033"],
+        "Newcastle": ["034"]
+      }
+    },
+    "Eastern Cape": {
+      "cities": {
+        "Port Elizabeth": ["041"],
+        "East London": ["043"],
+        "Grahamstown": ["046"]
+      }
+    },
+    "Free State": {
+      "cities": {
+        "Bloemfontein": ["051"],
+        "Welkom": ["057"]
+      }
+    },
+    "Northern Cape": {
+      "cities": {
+        "Kimberley": ["053"]
+      }
+    },
+    "Limpopo": {
+      "cities": {
+        "Polokwane": ["015"]
+      }
+    },
+    "Mpumalanga": {
+      "cities": {
+        "Nelspruit": ["013"]
+      }
+    },
+    "North West": {
+      "cities": {
+        "Rustenburg": ["014"]
+      }
+    }
+  },
+  "voip_prefixes": [
+    "087",
+    "088"
+  ],
+  "spam_patterns": {
+    "keywords": [
+      "loan",
+      "credit",
+      "bet",
+      "casino",
+      "prize",
+      "winner",
+      "claim"
+    ],
+    "characteristics": {
+      "rapid_calls": "Multiple calls within short timeframe",
+      "unknown_operator": "Unregistered or spoofed"
+    }
+  }
+}
