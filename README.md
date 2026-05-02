@@ -3,18 +3,8 @@
 
 ## 🎯 Overview
 
-**Phone Tracker** is a sophisticated, modular Python application designed for analyzing South African phone numbers. It combines validation, provider identification, geolocation estimation, and risk analysis 
-
- **Phone Number Validation** - Multiple format support (+27, 0XX, etc.)
- **Provider Identification** - MTN, Vodacom, Cell C, Telkom, Rain, and more
- **Geographic Estimation** - Province and city inference from area codes
- **Risk Analysis** - Spam/suspicious pattern detection
- **Subscriber Information** - Simulated data (for demonstration)
- **Beautiful CLI** - Hacker-style terminal interface with colors
- **Comprehensive Logging** - Track all queries and operations
- **Unit Tests** - Full test coverage for reliability
- **Modular Architecture** - Clean, maintainable code structure
----
+**Phone Tracker**
+ modular Python application designed for analyzing South African phone numbers. It combines validation, provider identification, geolocation estimation, and risk analysis 
 
 ## 🚀 Quick Start
 
