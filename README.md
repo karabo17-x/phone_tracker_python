@@ -3,21 +3,17 @@
 
 ## 🎯 Overview
 
-**Phone Tracker** is a sophisticated, modular Python application designed for analyzing South African phone numbers. It combines validation, provider identification, geolocation estimation, and risk analysis into one professional tool.
+**Phone Tracker** is a sophisticated, modular Python application designed for analyzing South African phone numbers. It combines validation, provider identification, geolocation estimation, and risk analysis 
 
-### Key Features
-
-✅ **Phone Number Validation** - Multiple format support (+27, 0XX, etc.)
-✅ **Provider Identification** - MTN, Vodacom, Cell C, Telkom, Rain, and more
-✅ **Geographic Estimation** - Province and city inference from area codes
-✅ **Risk Analysis** - Spam/suspicious pattern detection
-✅ **Subscriber Information** - Simulated data (for demonstration)
-✅ **Beautiful CLI** - Hacker-style terminal interface with colors
-✅ **Comprehensive Logging** - Track all queries and operations
-✅ **Unit Tests** - Full test coverage for reliability
-✅ **Modular Architecture** - Clean, maintainable code structure
-✅ **Mock APIs** - Integration patterns for external services
-
+ **Phone Number Validation** - Multiple format support (+27, 0XX, etc.)
+ **Provider Identification** - MTN, Vodacom, Cell C, Telkom, Rain, and more
+ **Geographic Estimation** - Province and city inference from area codes
+ **Risk Analysis** - Spam/suspicious pattern detection
+ **Subscriber Information** - Simulated data (for demonstration)
+ **Beautiful CLI** - Hacker-style terminal interface with colors
+ **Comprehensive Logging** - Track all queries and operations
+ **Unit Tests** - Full test coverage for reliability
+ **Modular Architecture** - Clean, maintainable code structure
 ---
 
 ## 🚀 Quick Start
@@ -31,7 +27,7 @@
 
 1. **Clone the repository**
 ```bash
-cd /home/xster/phone_tracker_python
+cd /phone_tracker_python
 ```
 
 2. **Install dependencies**
@@ -474,25 +470,8 @@ Contributions welcome! Areas for improvement:
 
 ---
 
-## 📄 License
-
-MIT License - See LICENSE file for details
-
----
-
-## 👤 Author
-
-Karabo Mothapo- Cybersecurity||Software Engineering
----
-
-## 📞 Support
-
 For issues, questions, or suggestions:
 - Open an issue on GitHub
 - Check existing documentation
 - Review test cases for usage examples
 
----
-
-**Last Updated**: March 17, 2026
-**Version**: 2.0.0
