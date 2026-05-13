@@ -1,12 +1,12 @@
-# 📞 South African Phone Number Intelligence Tool
+#  South African Phone Number Intelligence Tool
 
 
-## 🎯 Overview
+##  Overview
 
 **Phone Tracker** is a modular Python application designed for analyzing South African phone numbers. It combines validation, provider identification (using the phonenumbers library), geolocation estimation, and risk analysis 
 
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 
@@ -101,7 +101,7 @@ phone_tracker_python/
 
 ---
 
-## 🔍 Core Features Explained
+##  Core Features Explained
 
 ### 1. Phone Number Validation
 
@@ -218,7 +218,7 @@ The application uses:
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 ### Core Integration with phonenumbers Library
 
@@ -236,12 +236,9 @@ The root-level `phone_tracker.py` is a standalone script that can run independen
 ```bash
 python phone_tracker.py
 ```
-
-This script provides a simple CLI interface for quick phone number lookups. It's fully compatible with the package and demonstrates usage of the phonenumbers library with custom geolocation logic.
-
 ---
 
-## 🧪 Running Tests
+##  Running Tests
 
 ```bash
 # Run all tests
@@ -261,7 +258,7 @@ Test coverage includes:
 
 ---
 
-## 📊 Example Output
+##  Example Output
 
 ```
 ===========================================
@@ -273,13 +270,12 @@ Test coverage includes:
 ⠸ Analyzing...
 
 ────────────────────────────────────────────
-📊 ANALYSIS RESULTS
+           ANALYSIS RESULTS
 ────────────────────────────────────────────
 
 Basic Information:
   Phone Number:      +27 61 234 5678
   National Format:   061 234 5678
-  E.164 Format:      +27612345678
   Type:              MOBILE
 
 Provider Information:
@@ -289,9 +285,7 @@ Provider Information:
 Geographic Information:
   Province:          Gauteng
   Primary City:      Johannesburg
-  Coordinates:       -25.7461°, 28.2293°
-  Accuracy:          LOW (Area code based)
-  Map Link:          https://maps.google.com/?q=-25.7461,28.2293
+  
 
 Risk Analysis:
   Risk Level:        LOW
@@ -300,12 +294,8 @@ Risk Analysis:
   Flags:             None
 
 Subscriber Information :
-  Status:            ACTIVE
   Account Type:      Prepaid
   SIM Type:          Standard SIM
-  Activation Date:   2020-05-15
-  Last Activity:     2024-03-25
-  Note: This is simulated data for demonstration purposes only.
 
 ────────────────────────────────────────────
 ```
@@ -315,10 +305,10 @@ Subscriber Information :
 ## 🔐 Security & Privacy
 
 ### Transparency
-- ✓ No actual tracking 
-- ✓ Simulated subscriber data 
-- ✓ Local operation 
-- ✓ Comprehensive logging for audit trails
+-  No actual tracking 
+-  Simulated subscriber data 
+-  Local operation 
+-  Comprehensive logging for audit trails
 
 ### Data Protection
 - API keys not hardcoded 
@@ -333,7 +323,7 @@ The application uses the phonenumbers library for accurate data. No API keys are
 
 ---
 
-## 📝 Logging
+##  Logging
 
 All phone number queries are logged for audit trails:
 
@@ -353,7 +343,7 @@ tail -f logs/phone_tracker_$(date +%Y%m%d).log
 
 ---
 
-## 🚀 Advanced Usage
+## Advanced Usage
 
 ### Custom Validation Rules
 
@@ -395,7 +385,7 @@ print(fmt.create_table(["Name", "Value"], [["Test", "Pass"]]))
 
 ---
 
-## 📖 Module Documentation
+##  Module Documentation
 
 ### Core Modules
 
@@ -421,14 +411,9 @@ print(fmt.create_table(["Name", "Value"], [["Test", "Pass"]]))
 
 ---
 
-## ⚠️ Important Disclaimers
+##  Important Disclaimers
 
 1. **Not Actual Tracking**: Geographic information is estimated based on area codes and phonenumbers database. It cannot track actual device location.
-
-2. **Accurate Provider Data**: Provider information comes from the phonenumbers library, which uses actual carrier allocations and industry data.
-
-3. **Educational & Legitimate Use**: Designed for cybersecurity education, number validation, spam detection, and legitimate business use cases.
-
 
 ---
 
