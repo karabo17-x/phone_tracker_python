@@ -3,7 +3,7 @@ import sys
 import time
 from typing import Optional
 from datetime import datetime
-from phone_tracker.core.init import (
+from phone_tracker.core import (
     PhoneValidator,
     ProviderLookup,
     RiskAnalyzer,
@@ -26,8 +26,8 @@ class PhoneTrackerCLI:
     def show_banner(self):
         banner = r"""
     ==================================================
-    |                  SOUTH AFRICAN PHONE           |
-    |                    TRACKER ENGINE              |
+    |                SOUTH AFRICAN PHONE             |
+    |                  TRACKER ENGINE                |
     |                                                |
     ==================================================
         """
