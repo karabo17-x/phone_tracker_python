@@ -87,8 +87,8 @@ class RiskAnalyzer:
                 return False
             sorted_calls = sorted(call_history)
             
-            for i in range(len(sorted_calls) - 2):
-                time_diff = sorted_calls[i + 2] - sorted_calls[i]
+            for i in range(len(sorted_calls) - 1):
+                time_diff = sorted_calls[i + 1] - sorted_calls[i]
                 if time_diff < timedelta(minutes=RiskAnalyzer.RAPID_CALL_WINDOW_MINUTES):
                     return True
             
