@@ -29,6 +29,15 @@ class RiskAnalyzer:
 
     @staticmethod
     def analyze(phone_number: str, call_history: List[datetime] = None) -> Dict:
+        if not phone_number or not isinstance(phone_number, str):
+            return {
+                'risk_score': 0,
+                'risk_level': 'LOW',
+                'flags': ['Invalid phone number format'],
+                'safe': False,
+                'recommendation': 'Unable to analyze'
+            }
+        
         risk_score = 0
         flags = []
         
@@ -84,6 +93,9 @@ class RiskAnalyzer:
     @staticmethod
     def _is_uncommon_format(phone_number: str) -> bool:
         try:
+            if not phone_number or not isinstance(phone_number, str):
+                return True
+            
             if not phone_number.startswith("+27"):
                 return False
             
@@ -94,7 +106,7 @@ class RiskAnalyzer:
                 return True
             
             return False
-        except Exception:
+        except (AttributeError, TypeError):
             return True
     
     @staticmethod
