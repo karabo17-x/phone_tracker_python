@@ -12,6 +12,20 @@ class RiskAnalyzer:
         'HIGH': 2,
         'CRITICAL': 3
     }
+    
+    # Risk score increments
+    SPOOFED_PATTERN_SCORE = 2
+    RAPID_CALLS_SCORE = 2
+    UNCOMMON_FORMAT_SCORE = 1
+    
+    # Score thresholds
+    CRITICAL_THRESHOLD = 4
+    HIGH_THRESHOLD = 3
+    MEDIUM_THRESHOLD = 1
+    
+    # Call pattern thresholds
+    RAPID_CALL_WINDOW_MINUTES = 5
+    SA_PHONE_LENGTH = 12
 
     @staticmethod
     def analyze(phone_number: str, call_history: List[datetime] = None) -> Dict:
@@ -19,16 +33,16 @@ class RiskAnalyzer:
         flags = []
         
         if RiskAnalyzer._is_spoofed_pattern(phone_number):
-            risk_score += 2
+            risk_score += RiskAnalyzer.SPOOFED_PATTERN_SCORE
             flags.append("Potential spoofed number")
         
         if call_history and len(call_history) > 1:
             if RiskAnalyzer._detect_rapid_calls(call_history):
-                risk_score += 2
-                flags.append("repeated calls detected")
+                risk_score += RiskAnalyzer.RAPID_CALLS_SCORE
+                flags.append("Repeated calls detected")
         
         if RiskAnalyzer._is_uncommon_format(phone_number):
-            risk_score += 1
+            risk_score += RiskAnalyzer.UNCOMMON_FORMAT_SCORE
             flags.append("Uncommon format")
         
         risk_level = RiskAnalyzer._score_to_level(risk_score)
@@ -62,7 +76,7 @@ class RiskAnalyzer:
         
         for i in range(len(sorted_calls) - 2):
             time_diff = sorted_calls[i + 2] - sorted_calls[i]
-            if time_diff < timedelta(minutes=5):
+            if time_diff < timedelta(minutes=RiskAnalyzer.RAPID_CALL_WINDOW_MINUTES):
                 return True
         
         return False
@@ -73,7 +87,7 @@ class RiskAnalyzer:
             if not phone_number.startswith("+27"):
                 return False
             
-            if len(phone_number) != 12:
+            if len(phone_number) != RiskAnalyzer.SA_PHONE_LENGTH:
                 return True
             
             if not phone_number[3:].isdigit():
@@ -85,11 +99,11 @@ class RiskAnalyzer:
     
     @staticmethod
     def _score_to_level(score: int) -> str:
-        if score >= 4:
+        if score >= RiskAnalyzer.CRITICAL_THRESHOLD:
             return 'CRITICAL'
-        elif score >= 3:
+        elif score >= RiskAnalyzer.HIGH_THRESHOLD:
             return 'HIGH'
-        elif score >= 1:
+        elif score >= RiskAnalyzer.MEDIUM_THRESHOLD:
             return 'MEDIUM'
         else:
             return 'LOW'
