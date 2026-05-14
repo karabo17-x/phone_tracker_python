@@ -28,6 +28,8 @@ class RiskAnalyzer:
     RAPID_CALL_WINDOW_MINUTES = 5
     SA_PHONE_LENGTH = 12
     MIN_CALL_HISTORY_LENGTH = 2
+    MIN_PHONE_DIGITS = 7  # Minimum valid phone digits (even short country codes)
+    MAX_PHONE_DIGITS = 15  # Maximum per ITU-T E.164 standard
 
     @staticmethod
     def analyze(phone_number: str, call_history: Optional[List[datetime]] = None) -> Dict[str, Any]:
@@ -110,17 +112,57 @@ class RiskAnalyzer:
             if not phone_number or not isinstance(phone_number, str):
                 return True
             
-            if not phone_number.startswith("+27"):
-                return False
+            # Normalize: remove spaces, hyphens, parentheses, dots
+            normalized = re.sub(r'[\s\-().]', '', phone_number)
             
-            if len(phone_number) != RiskAnalyzer.SA_PHONE_LENGTH:
-                return True
+            # Check if it's an international format (starts with +)
+            if normalized.startswith('+'):
+                return RiskAnalyzer._validate_international_format(normalized)
             
-            if not phone_number[3:].isdigit():
-                return True
+            # Check if it's a local format (all digits, 7-15 digits per E.164)
+            if normalized.isdigit() and RiskAnalyzer.MIN_PHONE_DIGITS <= len(normalized) <= RiskAnalyzer.MAX_PHONE_DIGITS:
+                return False  # Valid local format
             
-            return False
+            # Unrecognized format
+            return True
         except (AttributeError, TypeError):
+            return True
+    
+    @staticmethod
+    def _validate_international_format(phone_number: str) -> bool:
+        """Validate international phone format (flexible - any country code). Returns True if uncommon/invalid."""
+        try:
+            # Must start with + (already checked by caller)
+            if not phone_number.startswith('+'):
+                return True
+            
+            # Extract country code and digits
+            # Country codes are 1-3 digits long (per ITU-T)
+            rest = phone_number[1:]  # Remove +
+            
+            # Find where country code ends (after 1-3 digits)
+            country_code_end = None
+            for i in range(1, min(4, len(rest) + 1)):
+                if rest[:i].isdigit():
+                    country_code_end = i
+            
+            if country_code_end is None:
+                return True  # Invalid format, no country code digits
+            
+            # Extract remaining digits (the actual phone number)
+            phone_digits = rest[country_code_end:]
+            
+            # Validate: must be all digits and within valid range
+            if not phone_digits.isdigit():
+                return True  # Non-digit characters after country code
+            
+            # Check length is within E.164 limits (7-15 digits total)
+            total_digits = country_code_end + len(phone_digits)
+            if total_digits < RiskAnalyzer.MIN_PHONE_DIGITS or total_digits > RiskAnalyzer.MAX_PHONE_DIGITS:
+                return True  # Invalid length
+            
+            return False  # Valid international format
+        except (AttributeError, TypeError, ValueError):
             return True
     
     @staticmethod
