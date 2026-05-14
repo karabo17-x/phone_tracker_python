@@ -148,17 +148,22 @@ class RiskAnalyzer:
 
 
 class CallPatternAnalyzer:
+    # Threshold constants
+    HIGH_CALL_FREQUENCY_THRESHOLD = 10
+    MIN_CALL_DURATION_MINUTES = 1
+    UNUSUAL_TIME_PERIODS = ['night', 'early_morning']
+    
     @staticmethod
     def analyze_pattern(call_frequency: int, call_duration_minutes: float, time_of_day: str) -> Dict[str, Any]:
         anomalies = []
         
-        if call_frequency > 10:
+        if call_frequency > CallPatternAnalyzer.HIGH_CALL_FREQUENCY_THRESHOLD:
             anomalies.append("Unusually high call frequency")
         
-        if call_duration_minutes < 1:
+        if call_duration_minutes < CallPatternAnalyzer.MIN_CALL_DURATION_MINUTES:
             anomalies.append("Very brief calls (< 1 minute)")
         
-        if time_of_day in ['night', 'early_morning']:
+        if time_of_day in CallPatternAnalyzer.UNUSUAL_TIME_PERIODS:
             anomalies.append("Calls at unusual hours")
         
         return {
