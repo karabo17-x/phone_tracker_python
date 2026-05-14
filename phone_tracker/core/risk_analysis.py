@@ -26,6 +26,7 @@ class RiskAnalyzer:
     # Call pattern thresholds
     RAPID_CALL_WINDOW_MINUTES = 5
     SA_PHONE_LENGTH = 12
+    MIN_CALL_HISTORY_LENGTH = 2
 
     @staticmethod
     def analyze(phone_number: str, call_history: Optional[List[datetime]] = None) -> Dict[str, Any]:
@@ -45,7 +46,7 @@ class RiskAnalyzer:
             risk_score += RiskAnalyzer.SPOOFED_PATTERN_SCORE
             flags.append("Potential spoofed number")
         
-        if call_history and len(call_history) > 1:
+        if call_history and len(call_history) >= RiskAnalyzer.MIN_CALL_HISTORY_LENGTH:
             if RiskAnalyzer._detect_rapid_calls(call_history):
                 risk_score += RiskAnalyzer.RAPID_CALLS_SCORE
                 flags.append("Repeated calls detected")
@@ -81,9 +82,9 @@ class RiskAnalyzer:
             return False
     
     @staticmethod
-    def _detect_rapid_calls(call_history: List[datetime]) -> bool:
+    def _detect_rapid_calls(call_history: Optional[List[datetime]]) -> bool:
         try:
-            if not call_history or len(call_history) < 2:
+            if not call_history or len(call_history) < RiskAnalyzer.MIN_CALL_HISTORY_LENGTH:
                 return False
             sorted_calls = sorted(call_history)
             
@@ -152,9 +153,38 @@ class CallPatternAnalyzer:
     HIGH_CALL_FREQUENCY_THRESHOLD = 10
     MIN_CALL_DURATION_MINUTES = 1
     UNUSUAL_TIME_PERIODS = ['night', 'early_morning']
+    MIN_CALL_FREQUENCY = 0
     
     @staticmethod
     def analyze_pattern(call_frequency: int, call_duration_minutes: float, time_of_day: str) -> Dict[str, Any]:
+        # Validate inputs
+        if not isinstance(call_frequency, int) or call_frequency < CallPatternAnalyzer.MIN_CALL_FREQUENCY:
+            return {
+                'call_frequency': call_frequency,
+                'avg_duration': call_duration_minutes,
+                'time_pattern': time_of_day,
+                'anomalies': ['Invalid call frequency'],
+                'is_suspicious': True
+            }
+        
+        if not isinstance(call_duration_minutes, (int, float)) or call_duration_minutes < 0:
+            return {
+                'call_frequency': call_frequency,
+                'avg_duration': call_duration_minutes,
+                'time_pattern': time_of_day,
+                'anomalies': ['Invalid call duration'],
+                'is_suspicious': True
+            }
+        
+        if not isinstance(time_of_day, str) or not time_of_day:
+            return {
+                'call_frequency': call_frequency,
+                'avg_duration': call_duration_minutes,
+                'time_pattern': time_of_day,
+                'anomalies': ['Invalid time period'],
+                'is_suspicious': True
+            }
+        
         anomalies = []
         
         if call_frequency > CallPatternAnalyzer.HIGH_CALL_FREQUENCY_THRESHOLD:
