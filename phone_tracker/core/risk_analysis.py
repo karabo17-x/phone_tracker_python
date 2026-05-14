@@ -66,29 +66,35 @@ class RiskAnalyzer:
     
     @staticmethod
     def _is_spoofed_pattern(phone_number: str) -> bool:
-        patterns = [
-            r'^0000',
-            r'^1111',
-            r'^(\d)\1{7,}',
-        ]
-        
-        for pattern in patterns:
-            if re.search(pattern, phone_number):
-                return True
-        return False
+        try:
+            patterns = [
+                r'^0000',
+                r'^1111',
+                r'^(\d)\1{7,}',
+            ]
+            
+            for pattern in patterns:
+                if re.search(pattern, phone_number):
+                    return True
+            return False
+        except (TypeError, re.error):
+            return False
     
     @staticmethod
     def _detect_rapid_calls(call_history: List[datetime]) -> bool:
-        if len(call_history) < 2:
+        try:
+            if not call_history or len(call_history) < 2:
+                return False
+            sorted_calls = sorted(call_history)
+            
+            for i in range(len(sorted_calls) - 2):
+                time_diff = sorted_calls[i + 2] - sorted_calls[i]
+                if time_diff < timedelta(minutes=RiskAnalyzer.RAPID_CALL_WINDOW_MINUTES):
+                    return True
+            
             return False
-        sorted_calls = sorted(call_history)
-        
-        for i in range(len(sorted_calls) - 2):
-            time_diff = sorted_calls[i + 2] - sorted_calls[i]
-            if time_diff < timedelta(minutes=RiskAnalyzer.RAPID_CALL_WINDOW_MINUTES):
-                return True
-        
-        return False
+        except (TypeError, AttributeError, ValueError):
+            return False
     
     @staticmethod
     def _is_uncommon_format(phone_number: str) -> bool:
@@ -111,24 +117,34 @@ class RiskAnalyzer:
     
     @staticmethod
     def _score_to_level(score: int) -> str:
-        if score >= RiskAnalyzer.CRITICAL_THRESHOLD:
-            return 'CRITICAL'
-        elif score >= RiskAnalyzer.HIGH_THRESHOLD:
-            return 'HIGH'
-        elif score >= RiskAnalyzer.MEDIUM_THRESHOLD:
-            return 'MEDIUM'
-        else:
+        try:
+            if not isinstance(score, (int, float)):
+                return 'LOW'
+            if score >= RiskAnalyzer.CRITICAL_THRESHOLD:
+                return 'CRITICAL'
+            elif score >= RiskAnalyzer.HIGH_THRESHOLD:
+                return 'HIGH'
+            elif score >= RiskAnalyzer.MEDIUM_THRESHOLD:
+                return 'MEDIUM'
+            else:
+                return 'LOW'
+        except (TypeError, ValueError):
             return 'LOW'
     
     @staticmethod
     def _get_recommendation(risk_level: str) -> str:
-        recommendations = {
-            'LOW': 'Safe to answer',
-            'MEDIUM': 'Answer with caution',
-            'HIGH': 'Extreme caution',
-            'CRITICAL': 'Do not answer - block and report'
-        }
-        return recommendations.get(risk_level, 'Unknown risk')
+        try:
+            if not isinstance(risk_level, str):
+                return 'Unknown risk'
+            recommendations = {
+                'LOW': 'Safe to answer',
+                'MEDIUM': 'Answer with caution',
+                'HIGH': 'Extreme caution',
+                'CRITICAL': 'Do not answer - block and report'
+            }
+            return recommendations.get(risk_level, 'Unknown risk')
+        except (TypeError, AttributeError):
+            return 'Unknown risk'
 
 
 class CallPatternAnalyzer:
