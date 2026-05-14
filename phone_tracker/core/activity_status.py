@@ -5,7 +5,7 @@ class ActivityStatus:
     def estimate_status(phone_number: str) -> Dict[str, any]:
         return {
             'likely_active': 'Unknown',
-            'last_activity': 'Not Available (Public Data Limitation)',
+            'last_activity': 'Not Available',
             'data_source': 'Estimation',
             'note': 'No private telecom data accessed.',
             'confidence': 'UNAVAILABLE',
