@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional, Any
 from datetime import datetime, timedelta
 
 class RiskAnalyzer:
@@ -28,7 +28,7 @@ class RiskAnalyzer:
     SA_PHONE_LENGTH = 12
 
     @staticmethod
-    def analyze(phone_number: str, call_history: List[datetime] = None) -> Dict:
+    def analyze(phone_number: str, call_history: Optional[List[datetime]] = None) -> Dict[str, Any]:
         if not phone_number or not isinstance(phone_number, str):
             return {
                 'risk_score': 0,
@@ -149,7 +149,7 @@ class RiskAnalyzer:
 
 class CallPatternAnalyzer:
     @staticmethod
-    def analyze_pattern(call_frequency: int, call_duration_minutes: float, time_of_day: str) -> Dict:
+    def analyze_pattern(call_frequency: int, call_duration_minutes: float, time_of_day: str) -> Dict[str, Any]:
         anomalies = []
         
         if call_frequency > 10:
