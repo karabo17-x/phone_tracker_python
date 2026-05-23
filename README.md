@@ -1,6 +1,4 @@
 #  South African Phone Number Intelligence Tool
-
-
 ##  Overview
 
 **Phone Tracker** is a modular Python application designed for analyzing South African phone numbers. It combines validation, provider identification (using the phonenumbers library), geolocation estimation, and risk analysis 
