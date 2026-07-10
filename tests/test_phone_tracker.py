@@ -1,11 +1,14 @@
 import unittest
 import sys
 import os
+import pytest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from phone_tracker.core.validator import PhoneValidator
 from phone_tracker.core.provider_lookup import ProviderLookup, GeolocationLookup
 from phone_tracker.core.risk_analysis import RiskAnalyzer
 from phone_tracker.utils.formatter import PhoneFormatter
+
+pytestmark = pytest.mark.pytest
 
 
 class TestPhoneValidator(unittest.TestCase):
@@ -33,6 +36,7 @@ class TestPhoneValidator(unittest.TestCase):
     def test_extract_prefix(self):
         prefix = self.validator.extract_prefix("+27123456789")
         self.assertEqual(prefix, "12")
+        self.assertEqual(self.validator.extract_prefix("123456789"), "12")
     
     def test_number_type_detection(self):
         number_type = self.validator.get_number_type("+27612345678")
@@ -85,6 +89,9 @@ class TestRiskAnalyzer(unittest.TestCase):
     def test_low_risk_score(self):
         result = self.analyzer.analyze("+27612345678")
         self.assertIn(result['risk_level'], ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'])
+
+    def test_spoofed_pattern_uses_national_number(self):
+        self.assertTrue(self.analyzer._is_spoofed_pattern("+27000000000"))
 
 
 class TestPhoneFormatter(unittest.TestCase):
