@@ -1,5 +1,6 @@
 import re
 from typing import Tuple, Optional
+from phone_tracker.utils.logger import PhoneTrackerLogger
 
 class PhoneValidator:
     PATTERNS = {
@@ -23,10 +24,10 @@ class PhoneValidator:
             
             parsed_number = phonenumbers.parse(cleaned, None)
             if phonenumbers.is_valid_number(parsed_number):
-                standardized = phonenumbers.format_number(parsed_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+                standardized = phonenumbers.format_number(parsed_number, phonenumbers.PhoneNumberFormat.E164)
                 return True, "", standardized
-        except Exception:
-            pass
+        except (ImportError, NumberParseException) as exc:
+            PhoneTrackerLogger().log_error(f"phonenumbers validation failed: {exc}", phone_number)
         
         if re.match(PhoneValidator.PATTERNS['international'], cleaned):
             return True, "", cleaned
@@ -46,13 +47,13 @@ class PhoneValidator:
         elif phone_number.startswith("0"):
             return phone_number[1:3]
         else:
-            return phone_number[1:3]
+            return phone_number[0:2]
     
     @staticmethod
     def get_number_type(phone_number: str) -> str:
         try:
             import phonenumbers
-            from phonenumbers.phonenumberutil import PhoneNumberType
+            from phonenumbers.phonenumberutil import NumberParseException, PhoneNumberType
             
             parsed_number = phonenumbers.parse(phone_number, None)
             number_type = phonenumbers.number_type(parsed_number)
@@ -65,8 +66,8 @@ class PhoneValidator:
                 return "voip"
             elif number_type == PhoneNumberType.UNKNOWN:
                 return "unknown"
-        except Exception:
-            pass
+        except (ImportError, NumberParseException) as exc:
+            PhoneTrackerLogger().log_error(f"phonenumbers type lookup failed: {exc}", phone_number)
         
         if phone_number.startswith("+27"):
             full_number = "0" + phone_number[3:]
