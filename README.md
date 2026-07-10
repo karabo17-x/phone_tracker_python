@@ -41,6 +41,8 @@ python -m phone_tracker.main
 ```
 Then enter phone numbers when prompted.
 
+The command-line app prints the Phone Tracker command-center banner at startup.
+
 #### Single Query
 ```bash
 python -m phone_tracker.main "+27612345678"
