@@ -2,6 +2,7 @@ import logging
 import os
 from datetime import datetime
 from typing import Optional
+from phone_tracker.utils.formatter import PhoneFormatter
 
 class PhoneTrackerLogger:
     LOG_DIR = os.path.join(os.path.dirname(__file__), '../../logs')
@@ -38,8 +39,9 @@ class PhoneTrackerLogger:
 
     def log_query(self, phone_number: str, provider: str, region: str, risk_level: str):
         if self._logger:
+            masked_number = PhoneFormatter.mask_number(phone_number)
             self._logger.info(
-                f"Query | Phone: {phone_number} | Provider: {provider} | Region: {region} | Risk: {risk_level}"
+                f"Query | Phone: {masked_number} | Provider: {provider} | Region: {region} | Risk: {risk_level}"
             )
     
     def log_error(self, error_msg: str, phone_number: Optional[str] = None):
