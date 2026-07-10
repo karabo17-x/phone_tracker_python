@@ -10,6 +10,7 @@ from phone_tracker.core import (
     LocationInference,
     ActivityStatus
 )
+from phone_tracker.ui.banner import build_cli_banner
 from phone_tracker.utils import PhoneFormatter, OutputFormatter, logger
 
 
@@ -24,14 +25,12 @@ class PhoneTrackerCLI:
         self.activity_status = ActivityStatus()
     
     def show_banner(self):
-        banner = r"""
-    ==================================================
-    |                SOUTH AFRICAN PHONE             |
-    |                  TRACKER ENGINE                |
-    |                                                |
-    ==================================================
-        """
-        print(self.formatter.colorize(banner, 'CYAN'))
+        print(self.formatter.colorize(build_cli_banner(), 'CYAN'))
+
+    def show_analysis_header(self, phone_number: str):
+        print(self.formatter.colorize("\n[COMMAND CENTER] Phone Tracker scan initialized", 'CYAN'))
+        print(f"Target Number: {self.formatter.colorize(phone_number, 'GREEN')}")
+        print(self.formatter.colorize("Scope: provider, location estimate, activity, and risk", 'BLUE'))
     
     def show_separator(self, title: Optional[str] = None):
         if title:
@@ -55,6 +54,7 @@ class PhoneTrackerCLI:
             print(self.formatter.error(error_msg))
             return False
         
+        self.show_analysis_header(standardized)
         self.show_loading("Analyzing")
         
         number_type = self.validator.get_number_type(standardized)
