@@ -1,35 +1,5 @@
-import json
-import os
-from typing import Dict, Optional, Tuple
-
-MOBILE_PREFIX_TO_PROVINCE = {
-    '60': 'Gauteng',
-    '61': 'Gauteng',
-    '62': 'KwaZulu-Natal',
-    '63': 'Gauteng',
-    '64': 'Western Cape',
-    '65': 'Eastern Cape',
-    '66': 'Gauteng',
-    '67': 'Limpopo',
-    '68': 'Mpumalanga',
-    '71': 'Western Cape',
-    '72': 'Western Cape',
-    '73': 'Gauteng',
-    '74': 'Free State',
-    '75': 'Free State',
-    '76': 'KwaZulu-Natal',
-    '78': 'Gauteng',
-    '79': 'Northern Cape',
-    '81': 'Limpopo',
-    '82': 'Mpumalanga',
-    '83': 'Free State',
-    '84': 'Gauteng',
-    '85': 'North West',
-    '87': 'Eastern Cape',
-    '88': 'Northern Cape',
-    '91': 'Gauteng',
-    '92': 'Western Cape',
-}
+from typing import Dict, Tuple
+from phone_tracker.core.prefix_data import LANDLINE_AREA_CODES, MOBILE_PREFIX_TO_PROVINCE
 
 MOBILE_PREFIXES_DB = {
     '60': ('Vodacom', 'VODACOM', 'Mobile'),
@@ -102,20 +72,6 @@ LANDLINE_PREFIXES_DB = {
 
 
 class ProviderLookup:
-    DATA_FILE = os.path.join(os.path.dirname(__file__), '../data/sa_prefixes.json')
-    
-    _cache: Dict = {}
-    
-    @classmethod
-    def load_data(cls) -> Dict:
-        if not cls._cache:
-            try:
-                with open(cls.DATA_FILE, 'r') as f:
-                    cls._cache = json.load(f)
-            except FileNotFoundError:
-                cls._cache = {}
-        return cls._cache
-    
     @staticmethod
     def identify_provider(phone_number: str) -> Tuple[str, str]:
         if phone_number.startswith("+27"):
@@ -222,53 +178,7 @@ class ProviderLookup:
 
 
 class GeolocationLookup:
-    ZA_AREA_CODES = {
-        '11': 'Gauteng (Johannesburg)',
-        '12': 'Gauteng (Pretoria)',
-        '13': 'Mpumalanga (Witbank)',
-        '14': 'North West (Rustenburg)',
-        '15': 'Limpopo (Polokwane)',
-        '16': 'North West (Mafikeng)',
-        '17': 'Gauteng (Kempton Park)',
-        '18': 'Free State (Bloemfontein)',
-        '21': 'Western Cape (Cape Town)',
-        '22': 'Western Cape (Mossel Bay)',
-        '23': 'Eastern Cape (East London)',
-        '24': 'Northern Cape (Kimberley)',
-        '27': 'Mpumalanga (Nelspruit)',
-        '28': 'Eastern Cape (Mthatha)',
-        '31': 'KwaZulu-Natal (Durban)',
-        '32': 'KwaZulu-Natal (Pietermaritzburg)',
-        '33': 'KwaZulu-Natal (Richards Bay)',
-        '34': 'KwaZulu-Natal (Newcastle)',
-        '41': 'Eastern Cape (Port Elizabeth)',
-        '42': 'Eastern Cape (Uitenhage)',
-        '44': 'Eastern Cape (Knysna)',
-        '45': 'Eastern Cape (George)',
-        '46': 'Eastern Cape (Caledon)',
-        '47': 'Western Cape (Hermanus)',
-        '48': 'Western Cape (Worcester)',
-        '51': 'Free State (Bloemfontein)',
-        '52': 'Free State (Welkom)',
-        '53': 'Free State (Winburg)',
-        '56': 'Free State (Thaba Nchu)',
-        '57': 'Free State (Ladybrand)',
-        '58': 'Northern Cape (Kimberley)',
-    }
-    
-    DATA_FILE = os.path.join(os.path.dirname(__file__), '../data/sa_prefixes.json')
-    
-    _cache: Dict = {}
-    
-    @classmethod
-    def load_data(cls) -> Dict:
-        if not cls._cache:
-            try:
-                with open(cls.DATA_FILE, 'r') as f:
-                    cls._cache = json.load(f)
-            except FileNotFoundError:
-                cls._cache = {}
-        return cls._cache
+    ZA_AREA_CODES = LANDLINE_AREA_CODES
     
     @staticmethod
     def estimate_region(phone_number: str) -> Tuple[str, str]:
