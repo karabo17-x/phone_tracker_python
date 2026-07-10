@@ -1,19 +1,10 @@
-import json
-import os
 import re
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
+from phone_tracker.utils.formatter import PhoneFormatter
 from phone_tracker.utils.logger import PhoneTrackerLogger
 
 class RiskAnalyzer:
-    DATA_FILE = os.path.join(os.path.dirname(__file__), '../data/sa_prefixes.json')
-    RISK_LEVELS = {
-        'LOW': 0,
-        'MEDIUM': 1,
-        'HIGH': 2,
-        'CRITICAL': 3
-    }
-    
     # Risk score increments
     SPOOFED_PATTERN_SCORE = 2
     RAPID_CALLS_SCORE = 2
@@ -77,6 +68,7 @@ class RiskAnalyzer:
     @staticmethod
     def _is_spoofed_pattern(phone_number: str) -> bool:
         try:
+            national_number = re.sub(r'\D', '', PhoneFormatter.to_national(phone_number))
             patterns = [
                 r'^0000',
                 r'^1111',
@@ -84,10 +76,10 @@ class RiskAnalyzer:
             ]
             
             for pattern in patterns:
-                if re.search(pattern, phone_number):
+                if re.search(pattern, national_number):
                     return True
             return False
-        except (TypeError, re.error):
+        except (AttributeError, TypeError, re.error):
             return False
     
     @staticmethod
@@ -195,70 +187,3 @@ class RiskAnalyzer:
             return recommendations.get(risk_level, 'Unknown risk')
         except (TypeError, AttributeError):
             return 'Unknown risk'
-
-
-class CallPatternAnalyzer:
-    # Threshold constants
-    HIGH_CALL_FREQUENCY_THRESHOLD = 10
-    MIN_CALL_DURATION_MINUTES = 1
-    UNUSUAL_TIME_PERIODS = ['night', 'early_morning']
-    MIN_CALL_FREQUENCY = 0
-    
-    @staticmethod
-    def analyze_pattern(call_frequency: int, call_duration_minutes: float, time_of_day: str) -> Dict[str, Any]:
-        logger = PhoneTrackerLogger()
-        # Validate inputs
-        if not isinstance(call_frequency, int) or call_frequency < CallPatternAnalyzer.MIN_CALL_FREQUENCY:
-            logger.log_error(f'Invalid call frequency: {call_frequency}')
-            return {
-                'call_frequency': call_frequency,
-                'avg_duration': call_duration_minutes,
-                'time_pattern': time_of_day,
-                'anomalies': ['Invalid call frequency'],
-                'is_suspicious': True
-            }
-        
-        if not isinstance(call_duration_minutes, (int, float)) or call_duration_minutes < 0:
-            logger.log_error(f'Invalid call duration: {call_duration_minutes}')
-            return {
-                'call_frequency': call_frequency,
-                'avg_duration': call_duration_minutes,
-                'time_pattern': time_of_day,
-                'anomalies': ['Invalid call duration'],
-                'is_suspicious': True
-            }
-        
-        if not isinstance(time_of_day, str) or not time_of_day:
-            logger.log_error(f'Invalid time period: {time_of_day}')
-            return {
-                'call_frequency': call_frequency,
-                'avg_duration': call_duration_minutes,
-                'time_pattern': time_of_day,
-                'anomalies': ['Invalid time period'],
-                'is_suspicious': True
-            }
-        
-        anomalies = []
-        
-        if call_frequency > CallPatternAnalyzer.HIGH_CALL_FREQUENCY_THRESHOLD:
-            anomalies.append("Unusually high call frequency")
-            logger._logger.info(f"High call frequency detected: {call_frequency} calls")
-        
-        if call_duration_minutes < CallPatternAnalyzer.MIN_CALL_DURATION_MINUTES:
-            anomalies.append("Very brief calls (< 1 minute)")
-            logger._logger.info(f"Brief call duration detected: {call_duration_minutes} minutes")
-        
-        if time_of_day in CallPatternAnalyzer.UNUSUAL_TIME_PERIODS:
-            anomalies.append("Calls at unusual hours")
-            logger._logger.info(f"Calls during unusual time: {time_of_day}")
-        
-        if len(anomalies) > 0:
-            logger._logger.info(f"Pattern analysis detected {len(anomalies)} anomalies: {anomalies}")
-        
-        return {
-            'call_frequency': call_frequency,
-            'avg_duration': call_duration_minutes,
-            'time_pattern': time_of_day,
-            'anomalies': anomalies,
-            'is_suspicious': len(anomalies) > 0
-        }
