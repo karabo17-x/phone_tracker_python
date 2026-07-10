@@ -1,5 +1,6 @@
 from typing import Dict, Tuple, Optional
 from .provider_lookup import GeolocationLookup as GeoLookup
+from phone_tracker.utils.logger import PhoneTrackerLogger
 
 class Geolocation:
     @staticmethod
@@ -7,6 +8,7 @@ class Geolocation:
         try:
             import phonenumbers
             from phonenumbers import geocoder
+            from phonenumbers.phonenumberutil import NumberParseException
             
             parsed_number = phonenumbers.parse(phone_number, None)
             geo_description = geocoder.description_for_number(parsed_number, "en")
@@ -23,8 +25,8 @@ class Geolocation:
                     'accuracy': 'MEDIUM',
                     'note': 'estimated from phonenumbers database'
                 }
-        except Exception:
-            pass
+        except (ImportError, NumberParseException) as exc:
+            PhoneTrackerLogger().log_error(f"phonenumbers geolocation lookup failed: {exc}", phone_number)
         
         region, city = GeoLookup.estimate_region(phone_number)
         coordinates = GeoLookup.get_approximate_coordinates(region)
